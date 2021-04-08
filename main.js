@@ -63,7 +63,7 @@ async function Chapitrage(config) {
             for (const indexSous_Chapitre in chapitre.Sous_Chapitre) {
                 SousChapitre = chapitre.Sous_Chapitre[indexSous_Chapitre]
                 if (SousChapitre.Type == "pdf") {
-                    window.AllHref[SousChapitre.Href] = chapitre.Titre_Chap+","+SousChapitre.Titre
+                    window.AllHref[SousChapitre.Href] = chapitre.Titre_Chap+"!$§"+SousChapitre.Titre
                     Spans += '<span onclick="pdfHhref(\'' + SousChapitre.Href + ',0\')" class="cursor-pointer"><p class="pl-6 pr-0 py-1 hover:bg-gray-400 align-middle select-none">' + SousChapitre.Titre + '</p></span>'
                 } else {
                     Spans += '<a href="' + SousChapitre.Href + '" target="_blank"><span><p class="pl-6 pr-0 py-1 hover:bg-gray-400 align-middle select-none">' + SousChapitre.Titre + '</p></span></a>'
@@ -82,7 +82,7 @@ function buttonSearch() {
     let objectButton = document.getElementById("objectButton");
     objectButton.remove();
     let divSearch = document.getElementById("divSearch");
-    divSearch.innerHTML = "<div class='relative'><input type='text' id='inputSearch' onblur='afficherSvg()' autocomplete='off' oninput='inputSearch(this.value)' name='mytext' placeholder='Recherche' class='py-1 wx-48 border-0 rounded-full text-center outline-none sm:px-28' /><div class='absolute mx-4 mt-1 bg-white box-border h-auto border-4 w-10/12 border-gray-300 sm:w-11/12 '><div>AAA</div><div>AAA</div><div>";
+    divSearch.innerHTML = "<div class='relative'><input type='text' id='inputSearch' onblur='afficherSvg()' autocomplete='off' oninput='inputSearch(this.value)' name='mytext' placeholder='Recherche' class='py-0.5 wx-48 text-center outline-none box-border h-auto border-2 border-black sm:px-28' /><div class='absolute bg-white box-border h-auto w-full border-2 mt-8 border-black' id='searchSuggestion'><span onclick='' class='cursor-pointer'><p class='px-4 pr-0 py-1 align-middle select-none'><strong>Aucune correspondance trouver</strong></p></span><div>"
     document.getElementById("inputSearch").focus()
 }
 
@@ -92,12 +92,27 @@ function afficherSvg() {
     let divSearch = document.getElementById("divSearch");
     divSearch.innerHTML = '<button class="focus:outline-none" onclick=buttonSearch() id="objectButton"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>';
 }
+function sort_object(dict) {
+    var items = Object.keys(dict).map(function(key) {
+        return [key, dict[key]];
+      });
+      
+      // Sort the array based on the second element
+      items.sort(function(first, second) {
+        return second[1] - first[1];
+      });
+      
+      // Create a new array with only the first 5 items
+    return items ;
+} 
+
 function inputSearch(string) {
+    let searchSuggestion = document.getElementById("searchSuggestion")
+    
     string = string.toLowerCase();
-    string = string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    string = string.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); 
     string = string.split(" ")
-    console.log(string)
-    DicoBadName = {}
+    DicoHrefName = {}
     
     for (w in string){
         mot = string[w]
@@ -107,10 +122,10 @@ function inputSearch(string) {
                 if (x != undefined) {
                     if (x.indexOf(mot) != -1) {
                         for(z in window.no[i]){
-                            if (z in DicoBadName){
-                                DicoBadName[z] += window.no[i][z]
+                            if (z in DicoHrefName){
+                                DicoHrefName[z] += window.no[i][z]
                             } else {
-                                DicoBadName[z] = window.no[i][z]
+                                DicoHrefName[z] = window.no[i][z]
                             }
                             
                         }
@@ -122,10 +137,27 @@ function inputSearch(string) {
         }
     }
     Dico = {}
-    for (i in DicoBadName){
-        Dico[window.AllHref[i.replace("\\","/")]] = DicoBadName[i]
+    for (i in DicoHrefName){
+        Dico[window.AllHref[i.replace("\\","/")]] = DicoHrefName[i]
         
     }
-    console.log(Dico)
+    Dico = sort_object(Dico)
+    if (Dico.length == 0) {
+        searchSuggestion.innerHTML = "<span onclick='' class='cursor-pointer'><p class='px-4 pr-0 py-1 align-middle select-none'><strong>Aucune correspondance trouver</strong></p></span>"
+    }else {
+        searchSuggestion.innerHTML = ""
+    }
+    
+    for(i in Dico) {
+        var suggestion = Dico[i][0]
+        suggestion = suggestion.split("!$§")
+        if (suggestion.length === 1) {
+            searchSuggestion.innerHTML += "<span onclick='' class='cursor-pointer'><p class='px-4 pr-0 py-1 hover:bg-gray-400 align-middle select-none'><strong>"+suggestion[0]+"</strong></p></span>"
+        } else {
+            searchSuggestion.innerHTML += "<span onclick='' class='cursor-pointer'><p class='px-4 pr-0 py-1 hover:bg-gray-400 align-middle select-none'><strong>"+suggestion[0]+"</strong><br>"+suggestion[1]+"</p></span>"
+        }
+        
+    }
+
         
 }
