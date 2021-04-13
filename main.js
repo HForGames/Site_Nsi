@@ -161,5 +161,5 @@ function inputSearch(string) {
 
 function pdfHhref(url,page){
     console.log("/PDFJS/web/viewer.html?file=%2F"+url.replace("/","%2F")+"#page="+page+"")
-    document.getElementById("pdf").src = "/PDFJS/web/viewer.html?file=%2F"+url.replace("/","%2F")+"#page="+page+"&view=fitH";
+    document.getElementById("pdf").src = "./PDFJS/web/viewer.html?file=%2F"+url.replace("/","%2F")+"#page="+page+"&view=fitH";
 }
