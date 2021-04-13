@@ -1,4 +1,4 @@
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/PDFJS/build/pdf.worker.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/Site_Nsi/PDFJS/build/pdf.worker.js';
 
 var config = fetch("./config.json").then((data) => data.json()).then((data) => Chapitrage(data));
 var Search = fetch("./Search.json").then((data) => data.json()).then((data) => { window.no = data });
