@@ -29,13 +29,15 @@
 
   <div class="flex flex-row">
     <div class="hidden lg:block shadow-2xl w-4/12 max-w-sm" id="chapitre">
-
+      <!-- Tous les chapitres -->
     </div>
-    <div class="bg-red-500 block w-full ml-4">
+    <div class="block w-full lg:ml-4">
+      <!-- pdf -->
+      <iframe id="pdf" src="/PDFJS/web/viewer.html?file=%2FFile%2Fnsi_t_ch3.pdf&view=fitH" title="webviewer" frameborder="0" class="w-full max-h-screen h-screen lg:h-full lg:max-h-full"></iframe>
     </div>
   </div>
-
-  <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+  
+  <script src="/PDFJS/build/pdf.js"></script>
   <script src="main.js"></script>
 </body>
 <footer>
