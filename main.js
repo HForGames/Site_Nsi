@@ -1,6 +1,4 @@
-// const path = "/Site_Nsi/"
-const pageQuote = "%2FSite_Nsi%2F"
-const path = ""
+const pageQuote = "%2FSite_Nsi%2F" // changer cette valeur pour le chemin racine jusqu'a File non compris les / sont remplacer par des %2F et on commence par un %2F
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = path + 'PDFJS/build/pdf.worker.js';
 
@@ -164,6 +162,7 @@ function inputSearch(string) {
 
 
 function pdfHhref(url,page){
-    console.log("/PDFJS/web/viewer.html?file=%2F"+url.replace("/","%2F")+"#page="+page+"")
-    document.getElementById("pdf").src = path+"PDFJS/web/viewer.html?file="+pageQuote+url.replace("/","%2F")+"#page="+page+"&view=fitH";
+    document.getElementById("pdf").src = "PDFJS/web/viewer.html?file="+pageQuote+url.replace("/","%2F")+"#page="+page+"&view=fitH";
 }
+
+document.getElementById("pdf").src = "PDFJS/web/viewer.html?file="+pageQuote+"File%2Fnsi_t_ch3.pdf&view=fitH"
