@@ -1,4 +1,8 @@
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/Site_Nsi/PDFJS/build/pdf.worker.js';
+// const path = "/Site_Nsi/"
+const pageQuote = "%2FSite_Nsi%2F"
+const path = ""
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = path + 'PDFJS/build/pdf.worker.js';
 
 var config = fetch("./config.json").then((data) => data.json()).then((data) => Chapitrage(data));
 var Search = fetch("./Search.json").then((data) => data.json()).then((data) => { window.no = data });
@@ -161,5 +165,5 @@ function inputSearch(string) {
 
 function pdfHhref(url,page){
     console.log("/PDFJS/web/viewer.html?file=%2F"+url.replace("/","%2F")+"#page="+page+"")
-    document.getElementById("pdf").src = "/Site_Nsi/PDFJS/web/viewer.html?file=%2FSite_Nsi%2F"+url.replace("/","%2F")+"#page="+page+"&view=fitH";
+    document.getElementById("pdf").src = path+"PDFJS/web/viewer.html?file="+pageQuote+url.replace("/","%2F")+"#page="+page+"&view=fitH";
 }
