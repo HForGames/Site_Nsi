@@ -1,5 +1,6 @@
 const pageQuote = "%2FSite_Nsi%2F" // %2FSite_Nsi%2F changer cette valeur pour le chemin racine jusqu'a File non compris les / sont remplacer par des %2F et on commence par un %2F
 
+
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'PDFJS/build/pdf.worker.js';
 
 var config = fetch("./config.json").then((data) => data.json()).then((data) => Chapitrage(data));
