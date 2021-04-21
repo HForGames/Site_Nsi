@@ -1,11 +1,13 @@
-const pageQuote = "%2FSite_Nsi%2F" // %2FSite_Nsi%2F changer cette valeur pour le chemin racine jusqu'a File non compris les / sont remplacer par des %2F et on commence par un %2F
+// %2FSite_Nsi%2F changer cette valeur pour le chemin racine jusqu'a File non compris les / sont remplacer par des %2F et on commence par un %2F
+const pageQuote = "%2FSite_Nsi%2F" 
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'PDFJS/build/pdf.worker.js';
 
+// ici on récupère les deux fichier .json 
 var config = fetch("./config.json").then((data) => data.json()).then((data) => Chapitrage(data));
 var Search = fetch("./Search.json").then((data) => data.json()).then((data) => { window.no = data });
 
-// ajouts des div qui permettrons d'ajouter tous les chapitre
+// cette fonction créer le chapitrage a partir du config.json
 async function Chapitrage(config) {
     const divAllChapitre = document.getElementById("chapitre");
     window.AllHref = {}
@@ -38,7 +40,7 @@ async function Chapitrage(config) {
                     var ligne = data[w].str
                     if (ligne.indexOf(" ") === -1) {
                         if (tempSpans != "") {
-                            Spans += '<span onclick="pdfHhref(\'' + chapitre.Pdf_Href +'\','+ligne+')" class="cursor-pointer"><p class="pl-6 pr-0 py-1 hover:bg-gray-400 align-middle select-none">' + tempSpans.slice(2, tempSpans.length) + '</p></span>'
+                            Spans += '<span onclick="pdfHref(\'' + chapitre.Pdf_Href + '\',' + ligne + ')" class="cursor-pointer"><p class="pl-6 pr-0 py-1 hover:bg-gray-400 align-middle select-none">' + tempSpans.slice(2, tempSpans.length) + '</p></span>'
                             tempSpans = ""
                         }
 
@@ -59,7 +61,7 @@ async function Chapitrage(config) {
                 SousChapitre = chapitre.Sous_Chapitre[indexSous_Chapitre]
                 if (SousChapitre.Type == "pdf") {
                     window.AllHref[SousChapitre.Href] = chapitre.Titre_Chap + "!$§" + SousChapitre.Titre
-                    Spans += '<span onclick="pdfHhref(\'' + SousChapitre.Href +'\','+0+')" class="cursor-pointer"><p class="pl-6 pr-0 py-1 hover:bg-gray-400 align-middle select-none">' + SousChapitre.Titre + '</p></span>'
+                    Spans += '<span onclick="pdfHref(\'' + SousChapitre.Href + '\',' + 0 + ')" class="cursor-pointer"><p class="pl-6 pr-0 py-1 hover:bg-gray-400 align-middle select-none">' + SousChapitre.Titre + '</p></span>'
                 } else {
                     Spans += '<a href="' + SousChapitre.Href + '" target="_blank"><span><p class="pl-6 pr-0 py-1 hover:bg-gray-400 align-middle select-none">' + SousChapitre.Titre + '</p></span></a>'
                 }
@@ -74,7 +76,7 @@ async function Chapitrage(config) {
     window.endChapitrage = true
 }
 
-
+// cette fonction permet d'afficher la barre de recherche
 function buttonSearch() {
     let objectButton = document.getElementById("objectButton");
     objectButton.remove();
@@ -83,6 +85,7 @@ function buttonSearch() {
     document.getElementById("inputSearch").focus()
 }
 
+// cette fonction permet de fermer la barre de recherche et de la remplacer par le svg de recherche
 function afficherSvg() {
     let inputSearch = document.getElementById("inputSearch");
     inputSearch.remove();
@@ -90,49 +93,50 @@ function afficherSvg() {
     divSearch.innerHTML = '<button class="focus:outline-none" onclick=buttonSearch() id="objectButton"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>';
 }
 
+// cette fonction permet d'afficher le menu pour mobile
 function menuSommaireOpen() {
     let divMenu = document.getElementById("divMenu")
     document.getElementById("chapitreMenu").innerHTML = document.getElementById("chapitre").innerHTML
     document.getElementById("chapitre-pdf").className += " hidden"
-    divMenu.innerHTML = '<button class="focus:outline-none" onclick=menuSommaireClose()><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>'
+    divMenu.innerHTML = '<button class="focus:outline-none" oncxlick=menuSommaireClose()><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>'
 }
 
+// cette fonction sert a fermer le menu et changer le bouton du menu pour mobile
 function menuSommaireClose() {
-    let divMenu = document.getElementById("divMenu")   
-    document.getElementById("chapitreMenu").innerHTML = ""  
+    let divMenu = document.getElementById("divMenu")
+    document.getElementById("chapitreMenu").innerHTML = ""
     document.getElementById("chapitre-pdf").className = "flex flex-row"
     divMenu.innerHTML = '<button class="focus:outline-none" onclick=menuSommaireOpen()><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32"stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg></button>'
 }
 
 
 //cette function fix des bugs sur le menuMobile et le faite de rezise la fenetre
-function menuSommaireCloseResize(){
+function menuSommaireCloseResize() {
     let divMenu = document.getElementById("divMenu")
-    if (window.innerWidth >= 1023 && window.endChapitrage){
+    if (window.innerWidth >= 1023 && window.endChapitrage) {
         document.getElementById("chapitreMenu").innerHTML = ""
         document.getElementById("chapitre-pdf").className = "flex flex-row"
         divMenu.innerHTML = '<button class="focus:outline-none" onclick=menuSommaireOpen()><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32"stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>'
     }
-    
+
 }
 
 window.addEventListener('resize', menuSommaireCloseResize);
 
-// Fonction Simple Ressemble a Sorted en python
+// cette fonction permet de classer un dictionaire par ordre décroissant 
 function sort_object(dict) {
     var items = Object.keys(dict).map(function (key) {
         return [key, dict[key]];
     });
-
-    // Sort the array based on the second element
+t
     items.sort(function (first, second) {
         return second[1] - first[1];
     });
 
-    // Create a new array with only the first 5 items
     return items;
 }
 
+// Cette fonction permet d'afficher les resultat en temps réel de la recherche 
 function inputSearch(string) {
     let searchSuggestion = document.getElementById("searchSuggestion")
 
@@ -171,7 +175,7 @@ function inputSearch(string) {
     Dico = sort_object(Dico)
     DicoHrefName = sort_object(DicoHrefName)
     if (Dico.length == 0) {
-        searchSuggestion.innerHTML = "<span onclick='' class='cursor-pointer'><p class='px-4 pr-0 py-1 align-middle select-none'><strong>Aucune correspondance trouver</strong></p></span>" 
+        searchSuggestion.innerHTML = "<span onclick='' class='cursor-pointer'><p class='px-4 pr-0 py-1 align-middle select-none'><strong>Aucune correspondance trouver</strong></p></span>"
     } else {
         searchSuggestion.innerHTML = ""
     }
@@ -181,19 +185,20 @@ function inputSearch(string) {
         console.log(DicoHrefName[i][0])
         suggestion = suggestion.split("!$§")
         if (suggestion.length === 1) {
-            searchSuggestion.innerHTML += '<span onmousedown="pdfHhref(\'' + DicoHrefName[i][0] +'\','+0+')" class="cursor-pointer"><p class="px-4 pr-0 py-1 hover:bg-gray-400 align-middle select-none"><strong>' + suggestion[0] + '</strong></p></span>'
+            searchSuggestion.innerHTML += '<span onmousedown="pdfHref(\'' + DicoHrefName[i][0] + '\',' + 0 + ')" class="cursor-pointer"><p class="px-4 pr-0 py-1 hover:bg-gray-400 align-middle select-none"><strong>' + suggestion[0] + '</strong></p></span>'
         } else {
-            searchSuggestion.innerHTML += '<span onmousedown="pdfHhref(\'' + DicoHrefName[i][0] +'\','+0+')" class="cursor-pointer"><p class="px-4 pr-0 py-1 hover:bg-gray-400 align-middle select-none"><strong>' + suggestion[0] + '</strong><br>' + suggestion[1] + '</p></span>'
+            searchSuggestion.innerHTML += '<span onmousedown="pdfHref(\'' + DicoHrefName[i][0] + '\',' + 0 + ')" class="cursor-pointer"><p class="px-4 pr-0 py-1 hover:bg-gray-400 align-middle select-none"><strong>' + suggestion[0] + '</strong><br>' + suggestion[1] + '</p></span>'
         }
 
     }
 
 }
 
-
-function pdfHhref(url,page){
+// Cette fonction permet d'afficher le pdf quand on click sur n'importe quel element qui doit afficher un pdf
+function pdfHref(url, page) {
     menuSommaireClose()
-    document.getElementById("pdf").src = "PDFJS/web/viewer.html?file="+pageQuote+url.replace("/","%2F")+"#page="+page+"&view=fitH";
+    document.getElementById("pdf").src = "PDFJS/web/viewer.html?file=" + pageQuote + url.replace("/", "%2F") + "#page=" + page + "&view=fitH";
 }
 
-document.getElementById("pdf").src = "PDFJS/web/viewer.html?file="+pageQuote+"File%2Fnsi_t_ch3.pdf&view=fitH"
+// Ce pdf est le pdf qui est afficher quand on arrive sur le site
+document.getElementById("pdf").src = "PDFJS/web/viewer.html?file=" + pageQuote + "File%2Fnsi_t_ch3.pdf&view=fitH"
