@@ -70,6 +70,8 @@ async function Chapitrage(config) {
         divChapitre.innerHTML = h3Titre + Spans
         divAllChapitre.appendChild(divChapitre)
     }
+    document.getElementById("divMenu").innerHTML = '<button class="focus:outline-none" onclick=menuSommaireOpen()><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32"stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg></button>'
+    window.endChapitrage = true
 }
 
 
@@ -87,6 +89,34 @@ function afficherSvg() {
     let divSearch = document.getElementById("divSearch");
     divSearch.innerHTML = '<button class="focus:outline-none" onclick=buttonSearch() id="objectButton"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></button>';
 }
+
+function menuSommaireOpen() {
+    let divMenu = document.getElementById("divMenu")
+    document.getElementById("chapitreMenu").innerHTML = document.getElementById("chapitre").innerHTML
+    document.getElementById("chapitre-pdf").className += " hidden"
+    divMenu.innerHTML = '<button class="focus:outline-none" onclick=menuSommaireClose()><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>'
+}
+
+function menuSommaireClose() {
+    let divMenu = document.getElementById("divMenu")   
+    document.getElementById("chapitreMenu").innerHTML = ""  
+    document.getElementById("chapitre-pdf").className = "flex flex-row"
+    divMenu.innerHTML = '<button class="focus:outline-none" onclick=menuSommaireOpen()><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32"stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg></button>'
+}
+
+
+//cette function fix des bugs sur le menuMobile et le faite de rezise la fenetre
+function menuSommaireCloseResize(){
+    let divMenu = document.getElementById("divMenu")
+    if (window.innerWidth >= 1023 && window.endChapitrage){
+        document.getElementById("chapitreMenu").innerHTML = ""
+        document.getElementById("chapitre-pdf").className = "flex flex-row"
+        divMenu.innerHTML = '<button class="focus:outline-none" onclick=menuSommaireOpen()><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32"stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>'
+    }
+    
+}
+
+window.addEventListener('resize', menuSommaireCloseResize);
 
 // Fonction Simple Ressemble a Sorted en python
 function sort_object(dict) {
@@ -162,6 +192,7 @@ function inputSearch(string) {
 
 
 function pdfHhref(url,page){
+    menuSommaireClose()
     document.getElementById("pdf").src = "PDFJS/web/viewer.html?file="+pageQuote+url.replace("/","%2F")+"#page="+page+"&view=fitH";
 }
 
