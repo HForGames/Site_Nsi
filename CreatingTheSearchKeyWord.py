@@ -38,6 +38,7 @@ for PDF in AllPDFS :
     text = convert_pdf_to_txt(PDF)
     text = formatPdf(text)
     ListeMot = text.split(" ")
+    PDF = PDF.replace("\\","/")
     if len(ListeMot) >= 2 :
         for i in ListeMot :
             i = i.lower()

@@ -135,7 +135,7 @@ function inputSearch(string) {
     }
     Dico = {}
     for (i in DicoHrefName) {
-        Dico[window.AllHref[i.replace("\\", "/")]] = DicoHrefName[i]
+        Dico[window.AllHref[i]] = DicoHrefName[i]
 
     }
     Dico = sort_object(Dico)
@@ -148,12 +148,12 @@ function inputSearch(string) {
 
     for (i in Dico) {
         var suggestion = Dico[i][0]
-        console.log(DicoHrefName[i][0].replace("\\", "/"))
+        console.log(DicoHrefName[i][0])
         suggestion = suggestion.split("!$§")
         if (suggestion.length === 1) {
-            searchSuggestion.innerHTML += '<span onmousedown="pdfHhref(\'' + DicoHrefName[i][0].replace("\\", "/") +'\','+0+')" class="cursor-pointer"><p class="px-4 pr-0 py-1 hover:bg-gray-400 align-middle select-none"><strong>' + suggestion[0] + '</strong></p></span>'
+            searchSuggestion.innerHTML += '<span onmousedown="pdfHhref(\'' + DicoHrefName[i][0] +'\','+0+')" class="cursor-pointer"><p class="px-4 pr-0 py-1 hover:bg-gray-400 align-middle select-none"><strong>' + suggestion[0] + '</strong></p></span>'
         } else {
-            searchSuggestion.innerHTML += '<span onmousedown="pdfHhref(\'' + DicoHrefName[i][0].replace("\\", "/") +'\','+0+')" class="cursor-pointer"><p class="px-4 pr-0 py-1 hover:bg-gray-400 align-middle select-none"><strong>' + suggestion[0] + '</strong><br>' + suggestion[1] + '</p></span>'
+            searchSuggestion.innerHTML += '<span onmousedown="pdfHhref(\'' + DicoHrefName[i][0] +'\','+0+')" class="cursor-pointer"><p class="px-4 pr-0 py-1 hover:bg-gray-400 align-middle select-none"><strong>' + suggestion[0] + '</strong><br>' + suggestion[1] + '</p></span>'
         }
 
     }
