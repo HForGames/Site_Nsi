@@ -5,7 +5,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'PDFJS/build/pdf.worker.js';
 
 // ici on récupère les deux fichier .json 
 var config = fetch("./config.json").then((data) => data.json()).then((data) => Chapitrage(data));
-var Search = fetch("./Search.json").then((data) => data.json()).then((data) => { window.no = data });
+var Search = fetch("./Search.json").then((data) => data.json()).then((data) => { window.dataSearch = data });
 
 // cette fonction créer le chapitrage a partir du config.json
 async function Chapitrage(config) {
@@ -98,7 +98,7 @@ function menuSommaireOpen() {
     let divMenu = document.getElementById("divMenu")
     document.getElementById("chapitreMenu").innerHTML = document.getElementById("chapitre").innerHTML
     document.getElementById("chapitre-pdf").className += " hidden"
-    divMenu.innerHTML = '<button class="focus:outline-none" oncxlick=menuSommaireClose()><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>'
+    divMenu.innerHTML = '<button class="focus:outline-none" onclick=menuSommaireClose()><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="32" height="32" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>'
 }
 
 // cette fonction sert a fermer le menu et changer le bouton du menu pour mobile
@@ -128,7 +128,7 @@ function sort_object(dict) {
     var items = Object.keys(dict).map(function (key) {
         return [key, dict[key]];
     });
-t
+
     items.sort(function (first, second) {
         return second[1] - first[1];
     });
@@ -148,15 +148,15 @@ function inputSearch(string) {
     for (w in string) {
         mot = string[w]
         if (mot != "") {
-            for (i in window.no) {
+            for (i in window.dataSearch) {
                 x = i.substr(0, mot.length)
                 if (x != undefined) {
                     if (x.indexOf(mot) != -1) {
-                        for (z in window.no[i]) {
+                        for (z in window.dataSearch[i]) {
                             if (z in DicoHrefName) {
-                                DicoHrefName[z] += window.no[i][z]
+                                DicoHrefName[z] += window.dataSearch[i][z]
                             } else {
-                                DicoHrefName[z] = window.no[i][z]
+                                DicoHrefName[z] = window.dataSearch[i][z]
                             }
 
                         }
@@ -182,7 +182,6 @@ function inputSearch(string) {
 
     for (i in Dico) {
         var suggestion = Dico[i][0]
-        console.log(DicoHrefName[i][0])
         suggestion = suggestion.split("!$§")
         if (suggestion.length === 1) {
             searchSuggestion.innerHTML += '<span onmousedown="pdfHref(\'' + DicoHrefName[i][0] + '\',' + 0 + ')" class="cursor-pointer"><p class="px-4 pr-0 py-1 hover:bg-gray-400 align-middle select-none"><strong>' + suggestion[0] + '</strong></p></span>'
